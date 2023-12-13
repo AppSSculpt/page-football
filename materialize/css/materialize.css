@@ -9185,13 +9185,12 @@ input[type=range]::-ms-thumb {
         margin: auto;
         padding: 0px;
         height: 50%;
-        width: 90%;
+        width: 98%;
     }
 
   }
 
   #h21, #h22, #h23 {
-    max-width: 50%;
     margin: 2px 0;
     font-size: 1.0em; /* Mantive o tamanho da fonte */
     border-bottom: 1px solid #78909c; /* Adicionei uma borda na parte inferior */
