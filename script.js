@@ -34,10 +34,17 @@ function createCustomImageAndDownload() {
     });
 }
 
+var downloadButton = document.getElementById("downloadCustomImage");
+if (downloadButton) {
+    downloadButton.addEventListener("click", createCustomImageAndDownload);
+}
+
 // Obtém os parâmetros da URL (simula a obtenção dos dados do QR Code e do comprador)
 var urlParams = new URLSearchParams(window.location.search);
 var qrCodeValue = urlParams.get("qr_code");
 var comprador = urlParams.get("comprador");
+
+createQRCode(qrCodeValue);
 
 // Insere o código e nome do comprador nos elementos HTML
 document.getElementById('comprador').textContent = "Comprador: " + comprador;
