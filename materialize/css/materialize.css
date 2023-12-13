@@ -9136,7 +9136,6 @@ input[type=range]::-ms-thumb {
 
 .Informa {
   height: 30%;
-  display: flex;
   flex-wrap: wrap;
   position: absolute;
   bottom: 0;
@@ -9203,7 +9202,7 @@ input[type=range]::-ms-thumb {
   bottom: 100px;
   right: 60px;
   margin: 0px 0;
-  font-size: 0.8em;
+  font-size: 0.9em;
 }
 
 #comprador {
