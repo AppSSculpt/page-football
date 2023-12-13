@@ -47,4 +47,4 @@ var comprador = urlParams.get("comprador");
 createQRCode(qrCodeValue);
 
 // Insere o código e nome do comprador nos elementos HTML
-document.getElementById('comprador').textContent = "Comprador: " + comprador;
+document.getElementById('comprador').textContent = "" + comprador;
