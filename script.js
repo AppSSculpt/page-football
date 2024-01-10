@@ -1,17 +1,12 @@
+// Certifique-se de incluir a biblioteca pdf-lib no seu projeto
+// Você pode encontrá-la em https://github.com/Hopding/pdf-lib
+
 document.addEventListener('DOMContentLoaded', function () {
     var qrCodeValue = getParameterValue('qr_code');
     var comprador = getParameterValue('comprador');
 
-    createQRCode(qrCodeValue);
-    document.getElementById('comprador').textContent = comprador;
-
-    document.getElementById('downloadPdf').addEventListener('click', function () {
-        var btn = this;
-        btn.classList.add('downloading');
-
-        createPDF().then(function () {
-            btn.classList.remove('downloading');
-        });
+    createPDF(comprador, qrCodeValue).then(function (pdfBytes) {
+        savePDF(pdfBytes);
     });
 });
 
@@ -20,31 +15,26 @@ function getParameterValue(parameterName) {
     return urlParams.get(parameterName);
 }
 
-function createQRCode(qrCodeValue) {
-    var qrcode = new QRCode(document.getElementById('qrcode'), {
-        text: qrCodeValue,
-        width: 120,
-        height: 120,
-    });
+async function createPDF(comprador, qrCodeValue) {
+    // Substitua 'INGRESSO PAC 2.pdf' pelo nome do seu modelo de ingresso
+    var pdfBytes = await fetch('INGRESSO PAC 2.pdf').then(res => res.arrayBuffer());
+    var pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+
+    // Crie uma nova página no PDF
+    var page = pdfDoc.addPage();
+
+    // Defina a fonte e o tamanho do texto
+    var font = await pdfDoc.embedFont(PDFLib.Font.Helvetica);
+    page.drawText('Comprador: ' + comprador, { x: 50, y: 500, font });
+    page.drawText('QR Code: ' + qrCodeValue, { x: 50, y: 450, font });
+
+    // Salve as modificações no PDF
+    var modifiedPdfBytes = await pdfDoc.save();
+    return modifiedPdfBytes;
 }
 
-function createPDF() {
-    return new Promise(function (resolve, reject) {
-        var container = document.getElementById('qrcode-container');
-        var options = { scale: 2 };
-
-        html2pdf().from(container).set(options).outputPdf().then(function (pdf) {
-            savePDF(pdf);
-            resolve();
-        }).catch(function (error) {
-            console.error('Error creating PDF:', error);
-            reject(error);
-        });
-    });
-}
-
-function savePDF(pdf) {
-    var pdfBlob = new Blob([pdf], { type: 'application/pdf' });
+function savePDF(pdfBytes) {
+    var pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
     var downloadLink = document.createElement('a');
     downloadLink.href = URL.createObjectURL(pdfBlob);
     downloadLink.download = 'seu_ingresso.pdf';
