@@ -1,34 +1,52 @@
-<!-- Adicione este script -->
-<script type="text/javascript">
-    document.addEventListener('DOMContentLoaded', function() {
-        // Obtém os parâmetros da URL (simula a obtenção dos dados do QR Code e do comprador)
-        var urlParams = new URLSearchParams(window.location.search);
-        var qrCodeValue = urlParams.get("qr_code");
-        var comprador = urlParams.get("comprador");
+document.addEventListener('DOMContentLoaded', function () {
+    var qrCodeValue = getParameterValue('qr_code');
+    var comprador = getParameterValue('comprador');
 
-        // Crie uma instância do objeto QRCode com os parâmetros adequados
-        var qrcode = new QRCode(document.getElementById("qrcode"), {
-            text: qrCodeValue,
-            width: 120,
-            height: 120,
-        });
+    createQRCode(qrCodeValue);
+    document.getElementById('comprador').textContent = comprador;
 
-        // Adiciona um ouvinte de clique ao botão de download
-        document.getElementById('downloadCustomImage').addEventListener('click', function() {
-            // Crie uma instância do objeto jsPDF
-            const pdf = new jsPDF();
+    document.getElementById('downloadPdf').addEventListener('click', function () {
+        var btn = this;
+        btn.classList.add('downloading');
 
-            // Obtém a imagem do QR Code
-            const qrcodeImage = document.getElementById("qrcode");
-
-            // Adiciona a imagem ao PDF
-            pdf.addImage(qrcodeImage, 'JPEG', 10, 10, 90, 90);
-
-            // Adiciona texto ou outros elementos ao PDF, se necessário
-            pdf.text(10, 110, "Comprador: " + comprador);
-
-            // Salva o PDF ou exibe no navegador
-            pdf.save('seu_ingresso.pdf');
+        createPDF().then(function () {
+            btn.classList.remove('downloading');
         });
     });
-</script>
+});
+
+function getParameterValue(parameterName) {
+    var urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(parameterName);
+}
+
+function createQRCode(qrCodeValue) {
+    var qrcode = new QRCode(document.getElementById('qrcode'), {
+        text: qrCodeValue,
+        width: 120,
+        height: 120,
+    });
+}
+
+function createPDF() {
+    return new Promise(function (resolve, reject) {
+        var container = document.getElementById('qrcode-container');
+        var options = { scale: 2 };
+
+        html2pdf().from(container).set(options).outputPdf().then(function (pdf) {
+            savePDF(pdf);
+            resolve();
+        }).catch(function (error) {
+            console.error('Error creating PDF:', error);
+            reject(error);
+        });
+    });
+}
+
+function savePDF(pdf) {
+    var pdfBlob = new Blob([pdf], { type: 'application/pdf' });
+    var downloadLink = document.createElement('a');
+    downloadLink.href = URL.createObjectURL(pdfBlob);
+    downloadLink.download = 'seu_ingresso.pdf';
+    downloadLink.click();
+}
