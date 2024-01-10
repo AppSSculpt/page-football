@@ -1,59 +1,85 @@
-// Certifique-se de incluir a biblioteca pdf-lib no seu projeto
-// Você pode encontrá-la em https://github.com/Hopding/pdf-lib
-
 document.addEventListener('DOMContentLoaded', async function () {
     var qrCodeValue = getParameterValue('qr_code');
     var comprador = getParameterValue('comprador');
 
     try {
-        await createAndDownloadPDF(comprador, qrCodeValue);
+        var pdfBytes = await fetch('INGRESSO_PAC.pdf').then(res => res.arrayBuffer());
+        var qrCodeImage = await generateQRCodeImage(qrCodeValue);
+
+        var modifiedPdfBytes = await createPDFWithQRCode(pdfBytes, comprador, qrCodeImage);
+        displayPDF(modifiedPdfBytes);
     } catch (error) {
         console.error('Erro ao criar PDF:', error);
     }
 });
 
-async function createAndDownloadPDF(comprador, qrCodeValue) {
-    // Substitua 'INGRESSO_PAC_2.pdf' pelo caminho do seu modelo de ingresso
-    var pdfBytes = await fetch('INGRESSO_PAC.pdf').then(res => res.arrayBuffer());
-    var pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-
-    // Crie uma nova página no PDF
-    var page = pdfDoc.addPage();
-
-    // Defina a fonte e o tamanho do texto
-    page.drawText('Comprador: ' + comprador, { x: 50, y: 500 });
-
-    // Gere uma imagem QR Code usando a biblioteca online
-    var qrCodeImageUrl = await generateQRCodeImageUrl(qrCodeValue);
-    var qrCodeImageBytes = await fetch(qrCodeImageUrl).then(res => res.arrayBuffer());
-
-    // Insira a imagem QR Code no PDF
-    page.drawImage(qrCodeImageBytes, { x: 50, y: 400, width: 100, height: 100 });
-
-    // Salve as modificações no PDF
-    var modifiedPdfBytes = await pdfDoc.save();
-
-    // Baixe automaticamente o PDF
-    savePDF(modifiedPdfBytes);
-}
-
-async function generateQRCodeImageUrl(qrCodeValue) {
-    // Use a biblioteca que você está usando para gerar QR Codes
-    // Substitua este trecho de código pela lógica específica da sua biblioteca para gerar QR Codes
-    // Este exemplo usa a biblioteca QR Code Generator (https://goqr.me/api/)
-    var apiUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(qrCodeValue)}&size=100x100`;
-    return apiUrl;
-}
-
-function savePDF(pdfBytes) {
-    var pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
-    var downloadLink = document.createElement('a');
-    downloadLink.href = URL.createObjectURL(pdfBlob);
-    downloadLink.download = 'seu_ingresso.pdf';
-    downloadLink.click();
-}
-
 function getParameterValue(parameterName) {
     var urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(parameterName);
+}
+
+async function generateQRCodeImage(qrCodeValue) {
+    // Use a biblioteca qrcode.js para gerar a imagem do QR Code
+    var qrCode = new QRCode(document.createElement('div'));
+    qrCode.makeCode(qrCodeValue);
+
+    // Converta a imagem do QR Code para um formato que pode ser usado no PDF
+    var qrCodeImage = await pdfDoc.embedPng(qrCode._el.firstChild.toDataURL());
+
+    return qrCodeImage;
+}
+
+async function createPDFWithQRCode(pdfBytes, comprador, qrCodeImage) {
+    var pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
+    var page = pdfDoc.getPage(0); // Supondo que o QR Code será adicionado à primeira página
+
+    // Defina a posição e o tamanho do QR Code na página
+    var qrCodeX = 50;
+    var qrCodeY = 450;
+    var qrCodeWidth = 120;
+    var qrCodeHeight = 120;
+
+    // Adicione a imagem do QR Code à página do PDF
+    page.drawImage(qrCodeImage, {
+        x: qrCodeX,
+        y: qrCodeY,
+        width: qrCodeWidth,
+        height: qrCodeHeight,
+    });
+
+    // Adicione o nome do comprador ao PDF
+    var font = await pdfDoc.embedFont(PDFLib.Font.Helvetica);
+    var textX = 50;
+    var textY = 500;
+    page.drawText('Comprador: ' + comprador, { x: textX, y: textY, font });
+
+    // Salve as modificações no PDF
+    var modifiedPdfBytes = await pdfDoc.save();
+    return modifiedPdfBytes;
+}
+
+function displayPDF(pdfBytes) {
+    var pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+
+    // Visualizar PDF
+    var viewLink = document.createElement('a');
+    viewLink.href = URL.createObjectURL(pdfBlob);
+    viewLink.target = '_blank';
+    viewLink.innerText = 'Visualizar PDF';
+
+    // Adicionar link de visualização à página
+    document.body.appendChild(viewLink);
+
+    // Download PDF
+    var downloadLink = document.createElement('a');
+    downloadLink.href = URL.createObjectURL(pdfBlob);
+    downloadLink.download = 'seu_ingresso.pdf';
+    downloadLink.innerText = 'Baixar PDF';
+
+    // Adicionar link de download à página
+    document.getElementById('downloadPdf').addEventListener('click', function () {
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    });
 }
