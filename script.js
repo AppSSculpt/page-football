@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 async function createAndDownloadPDF(comprador, qrCodeValue) {
     // Substitua 'INGRESSO_PAC_2.pdf' pelo caminho do seu modelo de ingresso
-    var pdfBytes = await fetch('INGRESSO_PAC_2.pdf').then(res => res.arrayBuffer());
+    var pdfBytes = await fetch('INGRESSO_PAC.pdf').then(res => res.arrayBuffer());
     var pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
 
     // Crie uma nova página no PDF
