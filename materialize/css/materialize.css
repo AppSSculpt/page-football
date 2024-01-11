@@ -9154,10 +9154,10 @@ input[type=range]::-ms-thumb {
   flex-wrap: wrap;
   flex-direction: column;
   position: absolute;
-  bottom: 0;
-  right: 0; 
+  bottom: 10px;
+  right: 10px; 
   transform: translateX(0);
-  width: 30%;
+  width: 35%;
   text-align: center;
   color: white;
   padding: 10px;
@@ -9186,7 +9186,8 @@ input[type=range]::-ms-thumb {
         margin: auto;
         padding: 0px;
         height: 50%;
-        width: 98%;
+        width: 100%;
+        text-align: center;
     }
 
   }
