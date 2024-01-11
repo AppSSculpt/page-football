@@ -28,7 +28,7 @@ function createCustomImageAndDownload() {
 
         var downloadLink = document.createElement("a");
         downloadLink.href = customImage.src;
-        downloadLink.download = "seu_ingresso.png";
+        downloadLink.download = comprador + "_ingresso.png";
 
         downloadLink.click();
     });
