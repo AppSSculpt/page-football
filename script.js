@@ -1,78 +1,50 @@
-let pdfDoc;
+function createQRCode(qrCodeValue) {
+    var qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: qrCodeValue,
+        width: 120,
+        height: 120,
+    });
+}
+  // Adiciona um ouvinte de clique ao link de download
+  document.getElementById('downloadCustomImage').addEventListener('click', function() {
+    var btn = this;
+    btn.classList.add('downloading');
+    
+    // Simula a geração e download da imagem (substitua isso pelo seu código de geração de QR Code)
+    createCustomImageAndDownload();
 
-document.addEventListener('DOMContentLoaded', async function () {
-    var qrCodeValue = getParameterValue('qr_code');
-    var comprador = getParameterValue('comprador');
-
-    try {
-        var pdfBytes = await fetch('INGRESSO_PAC.pdf').then(res => res.arrayBuffer());
-        var qrCodeImage = await generateQRCodeImage(qrCodeValue);
-
-        pdfDoc = await PDFLib.PDFDocument.load(pdfBytes);
-
-        var modifiedPdfBytes = await createPDFWithQRCode(comprador, qrCodeImage);
-        displayPDF(modifiedPdfBytes);
-    } catch (error) {
-        console.error('Erro ao criar PDF:', error);
-    }
+    setTimeout(function() {
+        btn.classList.remove('downloading');
+    }, 3000);
 });
 
-function getParameterValue(parameterName) {
-    var urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(parameterName);
-}
+// Simula a criação da imagem personalizada e download
+function createCustomImageAndDownload() {
+    var container = document.querySelector(".custom-qrcode-container");
+    
+    html2canvas(container).then(function(canvas) {
+        var customImage = new Image();
+        customImage.src = canvas.toDataURL("image/png");
 
-async function generateQRCodeImage(qrCodeValue) {
-    var qrCode = new QRCode(document.createElement('div'));
-    qrCode.makeCode(qrCodeValue);
+        var downloadLink = document.createElement("a");
+        downloadLink.href = customImage.src;
+        downloadLink.download = "seu_ingresso.png";
 
-    var qrCodeImage = await pdfDoc.embedPng(qrCode._el.firstChild.toDataURL());
-
-    return qrCodeImage;
-}
-
-async function createPDFWithQRCode(comprador, qrCodeImage) {
-    var page = pdfDoc.getPage(0);
-
-    var qrCodeX = 50;
-    var qrCodeY = 450;
-    var qrCodeWidth = 120;
-    var qrCodeHeight = 120;
-
-    page.drawImage(qrCodeImage, {
-        x: qrCodeX,
-        y: qrCodeY,
-        width: qrCodeWidth,
-        height: qrCodeHeight,
-    });
-
-    var font = await pdfDoc.embedFont(PDFLib.Font.Helvetica);
-    var textX = 50;
-    var textY = 500;
-    page.drawText('Comprador: ' + comprador, { x: textX, y: textY, font });
-
-    var modifiedPdfBytes = await pdfDoc.save();
-    return modifiedPdfBytes;
-}
-
-function displayPDF(pdfBytes) {
-    var pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
-
-    var viewLink = document.createElement('a');
-    viewLink.href = URL.createObjectURL(pdfBlob);
-    viewLink.target = '_blank';
-    viewLink.innerText = 'Visualizar PDF';
-
-    document.body.appendChild(viewLink);
-
-    var downloadLink = document.createElement('a');
-    downloadLink.href = URL.createObjectURL(pdfBlob);
-    downloadLink.download = 'seu_ingresso.pdf';
-    downloadLink.innerText = 'Baixar PDF';
-
-    document.getElementById('downloadPdf').addEventListener('click', function () {
-        document.body.appendChild(downloadLink);
         downloadLink.click();
-        document.body.removeChild(downloadLink);
     });
 }
+
+var downloadButton = document.getElementById("downloadCustomImage");
+if (downloadButton) {
+    downloadButton.addEventListener("click", createCustomImageAndDownload);
+}
+
+// Obtém os parâmetros da URL (simula a obtenção dos dados do QR Code e do comprador)
+var urlParams = new URLSearchParams(window.location.search);
+var qrCodeValue = urlParams.get("qr_code");
+var comprador = urlParams.get("comprador");
+
+createQRCode(qrCodeValue);
+
+// Insere o código e nome do comprador nos elementos HTML
+document.getElementById('comprador').textContent = "" + comprador;
