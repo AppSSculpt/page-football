@@ -9170,28 +9170,33 @@ input[type=range]::-ms-thumb {
   bottom: 21px;
   right: 10px;
   display: flex;
-    margin: auto;
-    padding: 5px;
-    height: 50%;
-    width: 80%;
-  }
+  margin: auto;
+  padding: 5px;
+  height: 30%;
+  width: 60%;
+  position: relative; /* Adicionado para corrigir o posicionamento absoluto */
+}
 
-  @media screen and (max-width: 768px) {
-    #qrcode{
+@media screen and (max-width: 768px) {
+  #qrcode {
       border-radius: 6px;
       background-color: #004d40;
-      bottom: 21px;
+      bottom: 5px;
       right: 10px;
       display: flex;
-        margin: auto;
-        padding: 0px;
-        height: 50%;
-        width: 100%;
-        text-align: center;
-    }
-
+      margin: auto;
+      padding: 2px;
+      height: 50%;
+      width: 100%;
+      text-align: center;
   }
+}
 
+#qrcode canvas {
+  border-radius: 6px;
+  width: 100%; /* Garante que o canvas ocupe 100% da largura da div */
+  height: 100%; /* Garante que o canvas ocupe 100% da altura da div */
+}
   #h21, #h22, #h23 {
     margin: 2px 0;
     font-size: 1.0em; /* Mantive o tamanho da fonte */ 
