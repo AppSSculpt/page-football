@@ -9115,7 +9115,6 @@ input[type=range]::-ms-thumb {
 .custom-qr-code {
   display: flex;
   border-radius: 6px;
-  background-color: #004d40;
   bottom: 200px; /* Ajuste a porcentagem conforme necessário */
   right: 39%;
   margin: auto;
@@ -9139,7 +9138,7 @@ input[type=range]::-ms-thumb {
 }
 
   /* .custom-qr-code {
-    background-color: #004d40; /* Cor de fundo do QR Code */
+    background-color: #004d40; 
      /*border-radius: 6px; 
   /*} */
 
