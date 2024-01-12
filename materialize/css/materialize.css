@@ -9093,110 +9093,43 @@ input[type=range]::-ms-thumb {
 }
 
 #qrcode-container {
-  max-width: 50%;
+  max-width: 500px;
   width: 100%;
-  background-color: rgba(249, 249, 249, 0.6);
-  position: relative;
   text-align: center;
   margin: 0 auto;
   padding: 10px;
   border-radius: 10px;
-  border: solid 1px black;
-  position: relative; /* Adicionei essa propriedade */
+  position: relative;
 }
-
-@media screen and (max-width: 768px) {
-  #qrcode-container {
-    max-width: 100%;
-    width: 100%;
-    max-height: 90%;
-    height: 100%;
-    background-color: rgba(249, 249, 249, 0.6);
-    position: relative;
-    text-align: center;
-    margin: 0 auto;
-    padding: 10px;
-    border-radius: 10px;
-    border: solid 1px black;
-    position: relative; /* Adicionei essa propriedade */
-  }
-}
-
-
-
 
 #Tickets {
+  border: 4px solid #FFFFFF; /* Largura, estilo e cor da borda */
   width: 100%;
   height: auto;
   margin: 0;
   padding: 0;
   border-radius: 6px;
-  position: relative; /* Adicionei essa propriedade */
-}
-
-.Informa {
-  display:none;
-  height: 30%;
-  flex-wrap: wrap;
-  position: absolute;
-  bottom: 0;
-  left: 0; 
-  transform: translateX(0);
-  width: 70%;
-  text-align: left;
-  color: white;
-  padding: 10px;
-}
-
-.Informa2 {
-  height: 30%;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: column;
-  position: absolute;
-  bottom: 10px;
-  right: 10px; 
-  transform: translateX(0);
-  width: 35%;
-  text-align: center;
-  color: white;
-  padding: 10px;
-  /*border-left: 1px solid #78909c; /* Adicionei uma borda na parte inferior */
+  position: relative;
 }
 
 #qrcode {
   border-radius: 6px;
   background-color: #004d40;
-  bottom: 21px;
-  right: 10px;
-  display: flex;
+  bottom: 200px; /* Ajuste a porcentagem conforme necessário */
+  right: 39%;
   margin: auto;
   padding: 5px;
-  height: 30%;
-  width: 60%;
-  position: relative; /* Adicionado para corrigir o posicionamento absoluto */
-}
-
-@media screen and (max-width: 768px) {
-  #qrcode {
-      border-radius: 6px;
-      background-color: #004d40;
-      bottom: 5px;
-      right: 10px;
-      display: flex;
-      margin: auto;
-      padding: 2px;
-      height: 50%;
-      width: 100%;
-      text-align: center;
-  }
+  height: 13%; /* Ajuste a porcentagem conforme necessário */
+  width: 25%; /* Ajuste a porcentagem conforme necessário */
+  position: absolute; /* Mudei de 'relative' para 'absolute' */
 }
 
 #qrcode canvas {
   border-radius: 6px;
-  width: 100%; /* Garante que o canvas ocupe 100% da largura da div */
-  height: 100%; /* Garante que o canvas ocupe 100% da altura da div */
+  width: 100%;
+  height: 100%;
 }
+
   #h21, #h22, #h23 {
     margin: 2px 0;
     font-size: 1.0em; /* Mantive o tamanho da fonte */ 
@@ -9215,7 +9148,7 @@ input[type=range]::-ms-thumb {
 #comprador {
   left: 55%;
   width: auto;
-  /* border-bottom: solid 1px white;*/
+  border-bottom: solid 1px white;
 }
 
 @media screen and (max-width: 768px) {
@@ -9227,38 +9160,6 @@ input[type=range]::-ms-thumb {
 
 }
 
-/* Adicionei um estilo para o gradiente nas informações */
-.Informa::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.7;
-  /* border-radius: 10px 0 0 10px; /* Adicionei valores específicos para os cantos do lado direito */
-  z-index: -1;
-}
-
-.Informa2::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.7;
- /*  border-radius: 0px 10px 10px 0px; /* Adicionei valores específicos para os cantos do lado direito */
-  z-index: -1;
-}
-
-
-
-#qrcode-container:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.723);
-  background-color: rgba(165, 160, 160, 0.8);
-}
 
 .social-icon {
   margin: 5px;
