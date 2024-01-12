@@ -9103,7 +9103,7 @@ input[type=range]::-ms-thumb {
 }
 
 #Tickets {
-  border: 4px solid #FFFFFF; /* Largura, estilo e cor da borda */
+  border: 2px solid #FFFFFF; /* Largura, estilo e cor da borda */
   width: 100%;
   height: auto;
   margin: 0;
