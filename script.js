@@ -11,7 +11,6 @@ function createQRCode(qrCodeValue) {
     btn.classList.add('downloading');
     
     // Simula a geração e download da imagem (substitua isso pelo seu código de geração de QR Code)
-    createCustomImageAndDownload();
 
     setTimeout(function() {
         btn.classList.remove('downloading');
