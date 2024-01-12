@@ -9112,7 +9112,8 @@ input[type=range]::-ms-thumb {
   position: relative;
 }
 
-#qrcode {
+.custom-qr-code {
+  display: flex;
   border-radius: 6px;
   background-color: #004d40;
   bottom: 200px; /* Ajuste a porcentagem conforme necessário */
@@ -9126,7 +9127,7 @@ input[type=range]::-ms-thumb {
 
 
 @media screen and (max-width: 768px) {
-  #qrcode {
+  .custom-qr-code {
     padding: 5px;
     bottom: 140px; /* Ajuste para telas menores */
     right: 33%; /* Ajuste para telas menores */
@@ -9139,8 +9140,8 @@ input[type=range]::-ms-thumb {
 
   /* .custom-qr-code {
     background-color: #004d40; /* Cor de fundo do QR Code */
-    /* border-radius: 6px; Bordas arredondadas, se necessário
-  */ 
+     /*border-radius: 6px; 
+  /*} */
 
   #h21, #h22, #h23 {
     margin: 2px 0;
